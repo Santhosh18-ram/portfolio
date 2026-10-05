@@ -43,25 +43,7 @@ Welcome to the official portfolio website of **Santhosh Ram K** — Full-Stack W
 
 ---
 
-## 📄 Resume & Photo
-- **Resume**: Available in `Santhosh_Resume.pdf`
-- **Photo**: `blazer photo.jpeg`
+
 
 ---
 
-## 💻 Local Development Setup
-To run this portfolio locally:
-
-```bash
-# Clone the repository
-git clone https://github.com/Santhosh18-ram/portfolio.git
-
-# Navigate to directory
-cd portfolio
-
-# Open index.html in any modern browser or launch with Live Server
-```
-
----
-
-© 2026 Santhosh Ram K. All rights reserved.
