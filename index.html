@@ -20,17 +20,826 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/logo/favicon.png" />
     
-    <!-- Google Fonts: Playfair Display (Serif) & Inter (Sans-serif) -->
+    <!-- Google Fonts: Playfair Display & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     
-    <!-- DevIcons -->
+    <!-- DevIcons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.15.1/devicon.min.css">
-    <script type="module" crossorigin src="./assets/index-Ce0Acqhu.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-vvpud50Y.css">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              bg: '#050505',
+              heading: '#f5f5f5',
+              body: '#9a9a9a',
+            },
+            fontFamily: {
+              serif: ['Playfair Display', 'Georgia', 'serif'],
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Libraries: Three.js, Lenis, GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+    <style>
+      :root {
+        --bg-primary: #050505;
+        --text-heading: #f5f5f5;
+        --text-body: #9a9a9a;
+        --border-white: rgba(255, 255, 255, 0.14);
+        --border-white-hover: rgba(255, 255, 255, 0.35);
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-bg-hover: rgba(255, 255, 255, 0.06);
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #050505;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.4);
+      }
+
+      body {
+        background-color: var(--bg-primary);
+        color: var(--text-body);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        overflow-x: hidden;
+      }
+
+      .font-serif {
+        font-family: 'Playfair Display', Georgia, serif;
+      }
+
+      /* Glassmorphism Cards */
+      .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid var(--border-white);
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+
+      .glass-card:hover {
+        background: var(--glass-bg-hover);
+        border-color: var(--border-white-hover);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 255, 255, 0.05);
+      }
+
+      /* White Glow Chip */
+      .chip-glow {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        color: #f5f5f5;
+        transition: all 0.3s ease;
+      }
+
+      .chip-glow:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      /* Buttons (Monochrome Only) */
+      .btn-white {
+        background-color: #f5f5f5;
+        color: #050505;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 0.75rem 1.6rem;
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        border: 1px solid #f5f5f5;
+        text-decoration: none;
+      }
+
+      .btn-white:hover {
+        background-color: #ffffff;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25);
+        color: #000000;
+      }
+
+      .btn-outline-white {
+        background-color: transparent;
+        color: #f5f5f5;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 0.75rem 1.6rem;
+        border: 1px solid var(--border-white);
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .btn-outline-white:hover {
+        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffffff;
+        transform: translateY(-2px);
+      }
+
+      /* Project Image Live Demo Hover Badge */
+      .project-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 340px;
+        background-color: #000;
+        display: block;
+        border-radius: 16px;
+      }
+
+      .project-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), filter 0.4s ease;
+      }
+
+      .project-img-wrapper .live-demo-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.7);
+        width: 120px;
+        height: 120px;
+        background-color: #ffffff;
+        color: #050505;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.95rem;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      .project-img-wrapper:hover .live-demo-badge {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .project-img-wrapper:hover .project-img {
+        transform: scale(1.08);
+        filter: brightness(0.75);
+      }
+
+      /* Mouse spotlight effect */
+      .spotlight-card {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .spotlight-card::before {
+        content: '';
+        position: absolute;
+        top: var(--mouse-y, 50%);
+        left: var(--mouse-x, 50%);
+        transform: translate(-50%, -50%);
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+      }
+
+      .spotlight-card:hover::before {
+        opacity: 1;
+      }
+
+      /* Marquee Track */
+      .marquee-container {
+        background: #000000;
+        border-top: 1px solid var(--border-white);
+        border-bottom: 1px solid var(--border-white);
+        padding: 1.2rem 0;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .marquee-track {
+        display: inline-block;
+        animation: marquee 25s linear infinite;
+      }
+
+      @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+      }
+    </style>
   </head>
-  <body class="bg-[#050505] text-[#9A9A9A] antialiased selection:bg-white selection:text-black">
-    <div id="root"></div>
+  <body class="bg-[#050505] text-[#9A9A9A] antialiased">
+
+    <!-- Scroll Progress Indicator -->
+    <div className="fixed top-0 left-0 right-0 h-[2px] bg-white/10 z-[1001]" style="position: fixed; top: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.1); z-index: 1001;">
+      <div id="scroll-progress-bar" style="height: 100%; background: #ffffff; width: 0%; transition: width 0.1s ease-out;"></div>
+    </div>
+
+    <!-- Navigation Header -->
+    <header id="main-navbar" class="fixed top-0 left-0 right-0 z-[1000] py-6 transition-all duration-300">
+      <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <a href="#" class="font-serif text-xl tracking-wider text-[#F5F5F5] font-bold hover:opacity-80 transition-opacity">
+          SANTHOSH RAM K
+        </a>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#about" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">About</a>
+          <a href="#skills" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">Skills</a>
+          <a href="#projects" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">Projects</a>
+          <a href="#achievements" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">Achievements</a>
+          <a href="#education" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">Education</a>
+          <a href="#contact" class="text-sm font-medium text-[#9A9A9A] hover:text-white transition-colors">Contact</a>
+        </nav>
+        <a href="#contact" class="hidden md:inline-flex btn-outline-white text-xs py-2 px-4">
+          Let's Talk ↗
+        </a>
+      </div>
+    </header>
+
+    <!-- Hero 3D WebGL Section -->
+    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden" style="position: relative; width: 100%; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+      <div id="webgl-container" style="position: absolute; inset: 0; z-index: 0;"></div>
+      <div style="position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 30%, #050505 85%); z-index: 1; pointer-events: none;"></div>
+
+      <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div class="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/14 bg-white/[0.02] text-xs font-mono tracking-widest text-[#9A9A9A] uppercase">
+          Acharya Institute of Technology • CSE
+        </div>
+        <h1 class="font-serif text-5xl sm:text-7xl md:text-8xl font-bold tracking-tight text-[#F5F5F5] mb-6 leading-tight">
+          Santhosh Ram K
+        </h1>
+        <div class="h-10 mb-8 flex items-center justify-center">
+          <p class="text-xl sm:text-2xl font-mono text-[#F5F5F5]">
+            <span class="text-[#9A9A9A]">&gt; </span>
+            <span id="typewriter-target">Full-Stack Developer</span>
+            <span class="animate-pulse">|</span>
+          </p>
+        </div>
+        <p class="max-w-2xl mx-auto text-base sm:text-lg text-[#9A9A9A] mb-10 font-sans leading-relaxed">
+          Building responsive web applications, normalized relational database engines, and AI-powered voice & risk intelligence platforms.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="#projects" class="btn-white">
+            View Projects ↓
+          </a>
+          <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-white">
+            <i class="devicon-github-original text-base"></i> GitHub Profile
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee Ticker -->
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">Full-Stack Web Development</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white/50 uppercase tracking-wider mx-6">React.js & Node.js</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">MySQL & PostgreSQL Normalization</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white/50 uppercase tracking-wider mx-6">AI Voice & Triage Systems</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">Smart India Hackathon 2026 Qualifier</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">Full-Stack Web Development</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white/50 uppercase tracking-wider mx-6">React.js & Node.js</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">MySQL & PostgreSQL Normalization</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white/50 uppercase tracking-wider mx-6">AI Voice & Triage Systems</span> <span class="text-white/40">•</span>
+        <span class="text-lg font-bold text-white uppercase tracking-wider mx-6">Smart India Hackathon 2026 Qualifier</span> <span class="text-white/40">•</span>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-16 text-center">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">01. Background</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-[#F5F5F5]">About Me</h2>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-5 flex justify-center">
+            <div id="about-card-tilt" class="glass-card p-3 rounded-2xl max-w-sm w-full cursor-pointer transition-transform duration-200">
+              <div class="relative overflow-hidden rounded-xl aspect-[4/5] bg-black">
+                <img src="assets/images/thumbs/santhosh-about.jpg" alt="Santhosh Ram K" class="w-full h-full object-cover filter grayscale contrast-110 hover:grayscale-0 transition-all duration-700" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                  <p class="font-serif text-lg font-bold text-white mb-0">Santhosh Ram K</p>
+                  <p class="text-xs text-[#9A9A9A] font-mono mb-0">Acharya Institute of Technology</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-7 space-y-8">
+            <div class="glass-card p-8 rounded-2xl">
+              <p class="text-lg text-[#F5F5F5] leading-relaxed mb-6 font-sans">
+                I am a third-year Computer Science Engineering student at <strong>Acharya Institute of Technology, Bengaluru</strong>, passionate about full-stack web engineering, database architecture, and AI-driven platforms.
+              </p>
+              <p class="text-base text-[#9A9A9A] leading-relaxed mb-6 font-sans">
+                My work ranges from normalized 8-table MySQL engines for peer-to-peer skill matching (<strong>SkillSphere</strong>) to multilingual AI voice symptom triage web apps (<strong>Talk To Heal</strong>) and explainable AI risk intelligence for government infrastructure (<strong>MPLADS Sentinel</strong>).
+              </p>
+              <p class="text-base text-[#9A9A9A] leading-relaxed font-sans">
+                Currently deepening full-stack engineering through Angela Yu's Bootcamp on Udemy and seeking a <strong>Web Development Internship</strong> to deliver real-world impact.
+              </p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="glass-card p-4 rounded-xl text-center">
+                <p id="stat-projects" class="font-serif text-3xl font-bold text-white mb-1">3</p>
+                <p class="text-xs text-[#9A9A9A] font-mono uppercase tracking-wider">Major Projects</p>
+              </div>
+              <div class="glass-card p-4 rounded-xl text-center">
+                <p id="stat-languages" class="font-serif text-3xl font-bold text-white mb-1">8</p>
+                <p class="text-xs text-[#9A9A9A] font-mono uppercase tracking-wider">Talk To Heal Languages</p>
+              </div>
+              <div class="glass-card p-4 rounded-xl text-center">
+                <p id="stat-cgpa" class="font-serif text-3xl font-bold text-white mb-1">8.45</p>
+                <p class="text-xs text-[#9A9A9A] font-mono uppercase tracking-wider">BE CGPA / 10.0</p>
+              </div>
+              <div class="glass-card p-4 rounded-xl text-center">
+                <p class="font-serif text-xl font-bold text-white mb-1 mt-1">SIH 2026</p>
+                <p class="text-xs text-[#9A9A9A] font-mono uppercase tracking-wider">National Qualifier</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-16 text-center">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">02. Technical Arsenal</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-[#F5F5F5]">Technical Skills</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Card 1 -->
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-serif text-xl font-bold text-white mb-4 pb-3 border-b border-white/10">Frontend Development</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-javascript-plain colored"></i> JavaScript (ES6+)</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-react-original colored"></i> React.js</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-html5-plain colored"></i> HTML5</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-css3-plain colored"></i> CSS3</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-bootstrap-plain colored"></i> Bootstrap</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Responsive Layouts</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">DOM Manipulation</span>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-serif text-xl font-bold text-white mb-4 pb-3 border-b border-white/10">Backend Engineering</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-nodejs-plain colored"></i> Node.js</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-express-original"></i> Express.js</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-flask-original"></i> Python (Flask)</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-fastapi-plain colored"></i> Python (FastAPI)</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">REST APIs</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">EJS</span>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-serif text-xl font-bold text-white mb-4 pb-3 border-b border-white/10">Databases & Architecture</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-postgresql-plain colored"></i> PostgreSQL</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-mongodb-plain colored"></i> MongoDB</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Schema Normalization (8-table)</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Stored Procedures & Triggers</span>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-serif text-xl font-bold text-white mb-4 pb-3 border-b border-white/10">Languages & Tools</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-cplusplus-plain colored"></i> C++</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">SQL</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-git-plain colored"></i> Git</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-github-original"></i> GitHub</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-vscode-plain colored"></i> VS Code</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2"><i class="devicon-npm-original-wordmark colored"></i> NPM</span>
+            </div>
+          </div>
+          <!-- Card 5 -->
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="font-serif text-xl font-bold text-white mb-4 pb-3 border-b border-white/10">Core Concepts</h3>
+            <div class="flex flex-wrap gap-2.5">
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Full-Stack Engineering</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">CRUD Operations</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">API Integration</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Authentication Systems</span>
+              <span class="chip-glow text-xs font-medium px-3 py-1.5 rounded-md flex items-center gap-2">Version Control</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section (The Showpiece) -->
+    <section id="projects" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-20 text-center">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">03. The Showpiece</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-[#F5F5F5]">Featured Projects</h2>
+        </div>
+
+        <div class="space-y-16">
+          <!-- SkillSphere -->
+          <div class="spotlight-card glass-card rounded-2xl p-8 border border-white/14">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div class="lg:col-span-6">
+                <a href="https://santhosh18-ram.github.io/Skill-Sphere/" target="_blank" class="project-img-wrapper">
+                  <img src="assets/images/thumbs/skillsphere-real.png" alt="SkillSphere" class="project-img" />
+                  <div class="live-demo-badge">↗<br/>Live Demo</div>
+                </a>
+              </div>
+              <div class="lg:col-span-6 space-y-6">
+                <div>
+                  <span class="font-mono text-sm text-[#9A9A9A] font-bold">01</span>
+                  <h3 class="font-serif text-2xl sm:text-3xl font-bold text-[#F5F5F5] mb-2">SkillSphere – Peer-to-Peer Skill Exchange Platform</h3>
+                  <p class="text-sm font-mono text-[#9A9A9A]">Python, MySQL</p>
+                </div>
+                <ul class="space-y-2 text-sm text-[#9A9A9A] list-disc list-inside font-sans leading-relaxed">
+                  <li>Designed a normalized 8-table MySQL schema with 1:1, 1:M, and M:N relationships, enforced via foreign keys, UNIQUE, and CHECK constraints.</li>
+                  <li>Built a skill-matching engine using stored procedures (sp_find_matching_partners) to pair students by complementary skills.</li>
+                  <li>Implemented transaction-safe session booking and 4 triggers for automated notifications and profile scoring.</li>
+                  <li>Created 3 views and 11 indexes to optimize reporting and query performance.</li>
+                </ul>
+                <div class="flex flex-wrap gap-2 pt-2">
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-python-plain colored"></i> Python</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-mysql-plain colored"></i> MySQL</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md">Stored Procedures</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md">Triggers & Views</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                  <a href="https://santhosh18-ram.github.io/Skill-Sphere/" target="_blank" class="btn-white text-xs">Live Demo ↗</a>
+                  <a href="https://github.com/Santhosh18-ram/Skill-Sphere" target="_blank" class="btn-outline-custom text-xs"><i class="devicon-github-original"></i> GitHub Repo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Talk To Heal -->
+          <div class="spotlight-card glass-card rounded-2xl p-8 border border-white/14">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div class="lg:col-span-6">
+                <a href="https://santhosh18-ram.github.io/Talk-to-heal/" target="_blank" class="project-img-wrapper">
+                  <img src="assets/images/thumbs/talktoheal-real.png" alt="Talk To Heal" class="project-img" />
+                  <div class="live-demo-badge">↗<br/>Live Demo</div>
+                </a>
+              </div>
+              <div class="lg:col-span-6 space-y-6">
+                <div>
+                  <span class="font-mono text-sm text-[#9A9A9A] font-bold">02</span>
+                  <h3 class="font-serif text-2xl sm:text-3xl font-bold text-[#F5F5F5] mb-2">Talk To Heal – AI Voice Healthcare Triage System</h3>
+                  <p class="text-sm font-mono text-[#9A9A9A]">HTML, CSS, JavaScript, Python (Flask)</p>
+                </div>
+                <ul class="space-y-2 text-sm text-[#9A9A9A] list-disc list-inside font-sans leading-relaxed">
+                  <li>Built a multilingual (8-language) voice-and-text symptom checker using the Web Speech API for speech-to-text and text-to-speech.</li>
+                  <li>Designed a diagnostic engine classifying symptoms across 8 medical departments with 4-level severity triage.</li>
+                  <li>Built the front-end UI and a Flask backend serving diagnosis logic via REST API.</li>
+                </ul>
+                <div class="flex flex-wrap gap-2 pt-2">
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-html5-plain colored"></i> HTML5 / CSS3</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-javascript-plain colored"></i> JavaScript</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md">Web Speech API</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-flask-original"></i> Python Flask</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                  <a href="https://santhosh18-ram.github.io/Talk-to-heal/" target="_blank" class="btn-white text-xs">Live Demo ↗</a>
+                  <a href="https://github.com/Santhosh18-ram/Talk-to-heal" target="_blank" class="btn-outline-custom text-xs"><i class="devicon-github-original"></i> GitHub Repo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MPLADS Sentinel -->
+          <div class="spotlight-card glass-card rounded-2xl p-8 border border-white/14">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+              <div class="lg:col-span-6">
+                <a href="https://santhosh18-ram.github.io/SIH-26MPLAD/" target="_blank" class="project-img-wrapper">
+                  <img src="assets/images/thumbs/mplads-real.png" alt="MPLADS Sentinel" class="project-img" />
+                  <div class="live-demo-badge">↗<br/>Live Demo</div>
+                </a>
+              </div>
+              <div class="lg:col-span-6 space-y-6">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="font-mono text-sm text-[#9A9A9A] font-bold">03</span>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white/10 text-white border border-white/20">🏆 Smart India Hackathon 2026 Qualifier</span>
+                  </div>
+                  <h3 class="font-serif text-2xl sm:text-3xl font-bold text-[#F5F5F5] mb-2">MPLADS Sentinel – AI Risk Intelligence System</h3>
+                  <p class="text-sm font-mono text-[#9A9A9A]">React/Next.js, Python (FastAPI), PostgreSQL</p>
+                </div>
+                <ul class="space-y-2 text-sm text-[#9A9A9A] list-disc list-inside font-sans leading-relaxed">
+                  <li>Designing an explainable AI risk-scoring system for government infrastructure project monitoring using rule-based checks, financial anomaly detection, and NLP duplicate-work detection.</li>
+                  <li>Architected a 5-pillar composite risk engine producing an auditable evidence card per flagged case.</li>
+                  <li>Built interactive prototype dashboards and workflow visualizations for the SIH presentation.</li>
+                </ul>
+                <div class="flex flex-wrap gap-2 pt-2">
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-react-original colored"></i> React / Next.js</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-fastapi-plain colored"></i> FastAPI</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md"><i class="devicon-postgresql-plain colored"></i> PostgreSQL</span>
+                  <span class="chip-glow text-xs px-3 py-1 rounded-md">SIH 2026 Qualifier</span>
+                </div>
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                  <a href="https://santhosh18-ram.github.io/SIH-26MPLAD/" target="_blank" class="btn-white text-xs">Live Demo ↗</a>
+                  <a href="https://github.com/Santhosh18-ram/SIH-26MPLAD" target="_blank" class="btn-outline-custom text-xs"><i class="devicon-github-original"></i> GitHub Repo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements & Certifications -->
+    <section id="achievements" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-16 text-center">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">04. Recognitions</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-[#F5F5F5]">Certifications & Achievements</h2>
+        </div>
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div class="glass-card p-6 rounded-2xl flex items-center justify-between gap-4">
+            <div>
+              <h3 class="font-serif text-lg sm:text-xl font-bold text-white mb-1">Complete Web Development Bootcamp</h3>
+              <p class="text-xs sm:text-sm text-[#9A9A9A]">Udemy – Instructor Angela Yu</p>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+            <div>
+              <h3 class="font-serif text-lg sm:text-xl font-bold text-white mb-1">Qualified for Next Round – Smart India Hackathon 2026 (SIH26102)</h3>
+              <p class="text-xs sm:text-sm text-[#9A9A9A]">Certificate of Participation – Acharya Institute of Technology</p>
+            </div>
+            <button onclick="openModal('sih-modal')" class="btn-outline-white text-xs py-2 px-3 shrink-0">View Certificate 👁</button>
+          </div>
+          <div class="glass-card p-6 rounded-2xl flex items-center justify-between gap-4">
+            <div>
+              <h3 class="font-serif text-lg sm:text-xl font-bold text-white mb-1">Participant, Srishti Hackathon</h3>
+              <p class="text-xs sm:text-sm text-[#9A9A9A]">Built Talk To Heal – Multilingual AI Voice Healthcare Triage System</p>
+            </div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl flex items-center justify-between gap-4 flex-wrap sm:flex-nowrap">
+            <div>
+              <h3 class="font-serif text-lg sm:text-xl font-bold text-white mb-1">Complete Guide to C Programming Foundations</h3>
+              <p class="text-xs sm:text-sm text-[#9A9A9A]">LinkedIn Learning Certification (C++ & C Foundations)</p>
+            </div>
+            <button onclick="openModal('c-modal')" class="btn-outline-white text-xs py-2 px-3 shrink-0">View Certificate 👁</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="sih-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="glass-card max-w-4xl w-full p-6 rounded-2xl border border-white/20 bg-[#11141d]">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+          <h3 class="font-serif text-xl font-bold text-white">Smart India Hackathon 2026 Certificate</h3>
+          <button onclick="closeModal('sih-modal')" class="text-[#9A9A9A] hover:text-white text-xl">✕</button>
+        </div>
+        <div class="flex justify-center p-2">
+          <img src="assets/images/certs/sih-cert.png" alt="SIH Certificate" class="max-h-[65vh] object-contain rounded-lg border border-white/10" />
+        </div>
+        <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/10 text-xs text-[#9A9A9A]">
+          <span>Acharya Institute of Technology (SIH 2026)</span>
+          <a href="assets/images/certs/sih-cert.png" target="_blank" class="btn-white text-xs py-1.5 px-3">Open Full Image ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="c-modal" class="hidden fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+      <div class="glass-card max-w-4xl w-full p-6 rounded-2xl border border-white/20 bg-[#11141d]">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+          <h3 class="font-serif text-xl font-bold text-white">C Programming Foundations Certificate</h3>
+          <button onclick="closeModal('c-modal')" class="text-[#9A9A9A] hover:text-white text-xl">✕</button>
+        </div>
+        <div class="flex justify-center p-2">
+          <img src="assets/images/certs/c-cert.png" alt="C Certificate" class="max-h-[65vh] object-contain rounded-lg border border-white/10" />
+        </div>
+        <div class="flex items-center justify-between pt-4 mt-4 border-t border-white/10 text-xs text-[#9A9A9A]">
+          <span>LinkedIn Learning (Santhosh Ram K)</span>
+          <a href="assets/images/certs/c-cert.png" target="_blank" class="btn-white text-xs py-1.5 px-3">Open Full Image ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education Section -->
+    <section id="education" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="mb-16 text-center">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">05. Academic Journey</span>
+          <h2 class="font-serif text-4xl sm:text-5xl font-bold text-[#F5F5F5]">Education</h2>
+        </div>
+        <div class="max-w-4xl mx-auto">
+          <div class="glass-card p-8 rounded-2xl">
+            <div class="flex items-start gap-5">
+              <div class="w-full space-y-3">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <h3 class="font-serif text-2xl font-bold text-white">Acharya Institute of Technology</h3>
+                  <span class="px-3 py-1 rounded-full text-xs font-mono bg-white/10 text-white border border-white/14">2024 – 2028</span>
+                </div>
+                <p class="text-base font-semibold text-[#F5F5F5]">Bachelor of Engineering in Computer Science & Engineering</p>
+                <div class="text-sm text-[#9A9A9A]">CGPA: <strong class="text-white">8.45 / 10.0</strong> | Bengaluru, India</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-28 bg-[#050505] relative z-10 border-t border-white/10">
+      <div class="max-w-7xl mx-auto px-6 text-center">
+        <div class="mb-12">
+          <span class="text-xs font-mono uppercase tracking-widest text-[#9A9A9A] mb-2 block">06. Next Steps</span>
+          <h2 class="font-serif text-5xl sm:text-7xl font-bold text-[#F5F5F5] tracking-tight leading-tight max-w-4xl mx-auto">
+            Let's build something together
+          </h2>
+        </div>
+        <p class="max-w-xl mx-auto text-base sm:text-lg text-[#9A9A9A] mb-10 font-sans leading-relaxed">
+          I am actively seeking a <strong>Web Development Internship</strong>. Whether you have a project idea, a job opportunity, or just want to connect — my inbox is always open.
+        </p>
+
+        <div class="flex flex-col items-center justify-center gap-4 mb-16">
+          <div class="inline-flex items-center gap-3 p-2 pl-5 rounded-xl bg-white/[0.03] border border-white/14">
+            <span class="font-mono text-sm sm:text-base text-white font-medium">santhoshramk18@gmail.com</span>
+            <button onclick="copyEmail()" class="btn-white text-xs py-2 px-4 ml-2"><span id="copy-btn-text">Copy Email</span></button>
+          </div>
+          <p id="copy-toast" class="hidden text-xs font-mono text-green-400">✓ Email address copied to clipboard!</p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-white"><i class="devicon-github-original"></i> GitHub Profile ↗</a>
+          <a href="https://linkedin.com/in/ramk1817" target="_blank" class="btn-outline-white"><i class="devicon-linkedin-plain colored"></i> LinkedIn Profile ↗</a>
+          <a href="tel:+917019675503" class="btn-outline-white">📞 +91 7019675503</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-10 bg-[#030303] border-t border-white/10 text-xs font-mono text-[#9A9A9A]">
+      <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div>© 2026 Santhosh Ram K. Built with Three.js, GSAP & Lenis.</div>
+        <button onclick="window.scrollTo({top:0, behavior:'smooth'})" class="p-3 rounded-full border border-white/14 bg-white/[0.03] text-white hover:bg-white hover:text-black transition-all">↑</button>
+      </div>
+    </footer>
+
+    <!-- Interactive Scripts: Three.js, Typewriter, Lenis, Spotlights, Modals -->
+    <script>
+      // 1. Lenis Smooth Scroll
+      const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+
+      // 2. Three.js Monochrome Interactive Scene
+      const container = document.getElementById('webgl-container');
+      if (container) {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 15;
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const outerGeo = new THREE.IcosahedronGeometry(5.5, 1);
+        const outerMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.12 });
+        const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+        scene.add(outerMesh);
+
+        const innerGeo = new THREE.IcosahedronGeometry(3.2, 0);
+        const innerMat = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true, transparent: true, opacity: 0.25 });
+        const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+        scene.add(innerMesh);
+
+        const particleCount = window.innerWidth < 768 ? 120 : 350;
+        const posArray = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 35; }
+        const particlesGeo = new THREE.BufferGeometry();
+        particlesGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMat = new THREE.PointsMaterial({ size: 0.05, color: 0xffffff, transparent: true, opacity: 0.4 });
+        const particleMesh = new THREE.Points(particlesGeo, particlesMat);
+        scene.add(particleMesh);
+
+        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+        window.addEventListener('mousemove', (e) => {
+          mouseX = (e.clientX - window.innerWidth / 2) * 0.0015;
+          mouseY = (e.clientY - window.innerHeight / 2) * 0.0015;
+        });
+
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        function animate() {
+          requestAnimationFrame(animate);
+          targetX += (mouseX - targetX) * 0.05;
+          targetY += (mouseY - targetY) * 0.05;
+          outerMesh.rotation.y += 0.002;
+          outerMesh.rotation.x += 0.001;
+          innerMesh.rotation.y -= 0.004;
+          particleMesh.rotation.y += 0.0005;
+          scene.rotation.y = targetX;
+          scene.rotation.x = targetY;
+          renderer.render(scene, camera);
+        }
+        animate();
+      }
+
+      // 3. Typewriter Effect
+      const words = ["Full-Stack Developer", "AI Systems Builder", "SIH 2026 Qualifier"];
+      let wIdx = 0, charIdx = 0, isDeleting = false;
+      const typeTarget = document.getElementById('typewriter-target');
+      function typeLoop() {
+        const currentWord = words[wIdx];
+        if (!isDeleting) {
+          typeTarget.textContent = currentWord.substring(0, charIdx + 1);
+          charIdx++;
+          if (charIdx === currentWord.length) { isDeleting = true; setTimeout(typeLoop, 2000); return; }
+        } else {
+          typeTarget.textContent = currentWord.substring(0, charIdx - 1);
+          charIdx--;
+          if (charIdx === 0) { isDeleting = false; wIdx = (wIdx + 1) % words.length; }
+        }
+        setTimeout(typeLoop, isDeleting ? 40 : 90);
+      }
+      typeLoop();
+
+      // 4. Scroll progress & navbar hide/show
+      const bar = document.getElementById('scroll-progress-bar');
+      const nav = document.getElementById('main-navbar');
+      let lastY = 0;
+      window.addEventListener('scroll', () => {
+        const currY = window.scrollY;
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        if (bar && total > 0) bar.style.width = (currY / total * 100) + '%';
+        if (currY > 100) {
+          if (currY > lastY) nav.style.transform = 'translateY(-100%)';
+          else nav.style.transform = 'translateY(0)';
+          nav.style.background = 'rgba(5,5,5,0.85)';
+          nav.style.backdropFilter = 'blur(12px)';
+        } else {
+          nav.style.transform = 'translateY(0)';
+          nav.style.background = 'transparent';
+        }
+        lastY = currY;
+      });
+
+      // 5. Spotlight & Tilt logic
+      document.querySelectorAll('.spotlight-card').forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          card.style.setProperty('--mouse-x', (e.clientX - rect.left) + 'px');
+          card.style.setProperty('--mouse-y', (e.clientY - rect.top) + 'px');
+        });
+      });
+
+      // 6. Copy Email Toast
+      function copyEmail() {
+        navigator.clipboard.writeText('santhoshramk18@gmail.com');
+        document.getElementById('copy-btn-text').textContent = 'Copied!';
+        document.getElementById('copy-toast').classList.remove('hidden');
+        setTimeout(() => {
+          document.getElementById('copy-btn-text').textContent = 'Copy Email';
+          document.getElementById('copy-toast').classList.add('hidden');
+        }, 3000);
+      }
+
+      // 7. Modals
+      function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+      function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    </script>
   </body>
 </html>
