@@ -113,6 +113,7 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
+        cursor: pointer;
       }
 
       .btn-outline-custom:hover {
@@ -246,7 +247,7 @@
         border-radius: 16px;
         padding: 2rem;
         height: 100%;
-        transition: all 0.35 ease;
+        transition: all 0.35s ease;
         position: relative;
         overflow: hidden;
       }
@@ -344,7 +345,8 @@
         padding: 1.6rem 2rem;
         margin-bottom: 1.3rem;
         display: flex;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: space-between;
         gap: 1.3rem;
         transition: all 0.3s ease;
       }
@@ -369,6 +371,24 @@
         border: 1px solid rgba(59, 130, 246, 0.3);
       }
 
+      /* Modal Custom Styling */
+      .modal-content-custom {
+        background-color: #11141d;
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        color: var(--text-white);
+      }
+
+      .modal-header-custom {
+        border-bottom: 1px solid var(--border-color);
+        padding: 1.2rem 1.5rem;
+      }
+
+      .modal-footer-custom {
+        border-top: 1px solid var(--border-color);
+        padding: 1rem 1.5rem;
+      }
+
       /* Footer */
       .footer-section {
         background-color: #040508;
@@ -382,6 +402,10 @@
         }
         .project-img-wrapper {
           height: 250px;
+        }
+        .timeline-item {
+          flex-direction: column;
+          align-items: flex-start;
         }
       }
     </style>
@@ -742,50 +766,126 @@
         <div class="row justify-content-center">
           <div class="col-lg-9">
 
+            <!-- Udemy Bootcamp -->
             <div class="timeline-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">
-              <div class="timeline-icon">
-                <i class="ph ph-certificate"></i>
-              </div>
-              <div>
-                <h5 class="text-white mb-1">Complete Web Development Bootcamp</h5>
-                <p class="text-gray mb-0">Udemy – Instructor Angela Yu</p>
+              <div class="d-flex align-items-center gap-3">
+                <div class="timeline-icon">
+                  <i class="ph ph-certificate"></i>
+                </div>
+                <div>
+                  <h5 class="text-white mb-1">Complete Web Development Bootcamp</h5>
+                  <p class="text-gray mb-0">Udemy – Instructor Angela Yu</p>
+                </div>
               </div>
             </div>
 
+            <!-- Smart India Hackathon 2026 Certificate -->
             <div class="timeline-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
-              <div class="timeline-icon">
-                <i class="ph ph-trophy"></i>
+              <div class="d-flex align-items-center gap-3">
+                <div class="timeline-icon">
+                  <i class="ph ph-trophy"></i>
+                </div>
+                <div>
+                  <h5 class="text-white mb-1">Qualified for Next Round – Smart India Hackathon 2026 (SIH26102)</h5>
+                  <p class="text-gray mb-0">Certificate of Participation – Acharya Institute of Technology</p>
+                </div>
               </div>
-              <div>
-                <h5 class="text-white mb-1">Qualified for Next Round – Smart India Hackathon 2026 (SIH26102)</h5>
-                <p class="text-gray mb-0">MPLADS Sentinel – AI Risk Intelligence System for Government Infrastructure Monitoring</p>
-              </div>
+              <button
+                class="btn-outline-custom btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#sihModal"
+              >
+                <i class="ph ph-eye"></i> View Certificate
+              </button>
             </div>
 
+            <!-- Srishti Hackathon -->
             <div class="timeline-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="300">
-              <div class="timeline-icon">
-                <i class="ph ph-medal"></i>
-              </div>
-              <div>
-                <h5 class="text-white mb-1">Participant, Srishti Hackathon</h5>
-                <p class="text-gray mb-0">Built Talk To Heal, an AI voice healthcare triage system</p>
+              <div class="d-flex align-items-center gap-3">
+                <div class="timeline-icon">
+                  <i class="ph ph-medal"></i>
+                </div>
+                <div>
+                  <h5 class="text-white mb-1">Participant, Srishti Hackathon</h5>
+                  <p class="text-gray mb-0">Built Talk To Heal, an AI voice healthcare triage system</p>
+                </div>
               </div>
             </div>
 
+            <!-- C++ Certification -->
             <div class="timeline-item" data-aos="fade-up" data-aos-duration="800" data-aos-delay="400">
-              <div class="timeline-icon">
-                <i class="ph ph-seal-check"></i>
+              <div class="d-flex align-items-center gap-3">
+                <div class="timeline-icon">
+                  <i class="ph ph-seal-check"></i>
+                </div>
+                <div>
+                  <h5 class="text-white mb-1">Complete Guide to C Programming Foundations</h5>
+                  <p class="text-gray mb-0">LinkedIn Learning Certification</p>
+                </div>
               </div>
-              <div>
-                <h5 class="text-white mb-1">C++: Basic Concepts and Programming</h5>
-                <p class="text-gray mb-0">LinkedIn Learning Certification</p>
-              </div>
+              <button
+                class="btn-outline-custom btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#cCertModal"
+              >
+                <i class="ph ph-eye"></i> View Certificate
+              </button>
             </div>
 
           </div>
         </div>
       </div>
     </section>
+
+    <!-- SIH Certificate Modal -->
+    <div class="modal fade" id="sihModal" tabindex="-1" aria-labelledby="sihModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content modal-content-custom">
+          <div class="modal-header modal-header-custom">
+            <h5 class="modal-title text-white" id="sihModalLabel">
+              <i class="ph ph-trophy text-primary me-2"></i> Smart India Hackathon 2026 Certificate
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center p-3">
+            <a href="assets/images/certs/sih-cert.png" target="_blank" title="Click to view full size">
+              <img src="assets/images/certs/sih-cert.png" alt="Smart India Hackathon 2026 Certificate" class="img-fluid rounded border border-secondary" />
+            </a>
+          </div>
+          <div class="modal-footer modal-footer-custom justify-content-between">
+            <span class="text-gray fs-6">Issued by Acharya Institute of Technology (SIH 2026)</span>
+            <a href="assets/images/certs/sih-cert.png" target="_blank" class="btn-accent btn-sm">
+              <i class="ph ph-arrow-square-out"></i> Open Full Image
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C Programming / C++ Certificate Modal -->
+    <div class="modal fade" id="cCertModal" tabindex="-1" aria-labelledby="cCertModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content modal-content-custom">
+          <div class="modal-header modal-header-custom">
+            <h5 class="modal-title text-white" id="cCertModalLabel">
+              <i class="ph ph-seal-check text-primary me-2"></i> LinkedIn Learning - C Programming Foundations Certificate
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center p-3">
+            <a href="assets/images/certs/c-cert.png" target="_blank" title="Click to view full size">
+              <img src="assets/images/certs/c-cert.png" alt="C Programming Foundations Certificate" class="img-fluid rounded border border-secondary" />
+            </a>
+          </div>
+          <div class="modal-footer modal-footer-custom justify-content-between">
+            <span class="text-gray fs-6">Issued by LinkedIn Learning (Santhosh Ram K)</span>
+            <a href="assets/images/certs/c-cert.png" target="_blank" class="btn-accent btn-sm">
+              <i class="ph ph-arrow-square-out"></i> Open Full Image
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Education Section -->
     <section id="education" class="section-padding" style="background-color: #0b0d14;">
@@ -797,16 +897,18 @@
         <div class="row justify-content-center" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
           <div class="col-lg-9">
             <div class="timeline-item">
-              <div class="timeline-icon">
-                <i class="ph ph-graduation-cap"></i>
-              </div>
-              <div class="w-100">
-                <div class="d-flex justify-content-between align-items-center flex-wrap">
-                  <h4 class="text-white mb-1 fs-5">Acharya Institute of Technology</h4>
-                  <span class="badge bg-secondary">2024 – 2028</span>
+              <div class="d-flex align-items-center gap-3 w-100">
+                <div class="timeline-icon">
+                  <i class="ph ph-graduation-cap"></i>
                 </div>
-                <div class="text-primary fw-semibold mb-2">Bachelor of Engineering in Computer Science</div>
-                <div class="text-gray">CGPA: <strong>8.45 / 10.0</strong> | Bengaluru, India</div>
+                <div class="w-100">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h4 class="text-white mb-1 fs-5">Acharya Institute of Technology</h4>
+                    <span class="badge bg-secondary">2024 – 2028</span>
+                  </div>
+                  <div class="text-primary fw-semibold mb-2">Bachelor of Engineering in Computer Science</div>
+                  <div class="text-gray">CGPA: <strong>8.45 / 10.0</strong> | Bengaluru, India</div>
+                </div>
               </div>
             </div>
           </div>
