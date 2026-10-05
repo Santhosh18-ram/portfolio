@@ -285,7 +285,7 @@
         font-size: 1.15rem;
       }
 
-      /* Project Cards */
+      /* Project Cards & Interactive Live Demo Hover Button */
       .project-card {
         background-color: var(--bg-card);
         border: 1px solid var(--border-color);
@@ -303,10 +303,12 @@
       }
 
       .project-img-wrapper {
-        overflow: hidden;
         position: relative;
+        overflow: hidden;
         height: 340px;
         background-color: #000;
+        display: block;
+        text-decoration: none;
       }
 
       .project-img {
@@ -314,11 +316,46 @@
         height: 100%;
         object-fit: cover;
         object-position: top;
-        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1), filter 0.4s ease;
       }
 
-      .project-card:hover .project-img {
-        transform: scale(1.05);
+      .project-img-wrapper .live-demo-badge {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.7);
+        width: 125px;
+        height: 125px;
+        background-color: #ffffff;
+        color: #0d0e14;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 0.95rem;
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+        text-align: center;
+        line-height: 1.2;
+      }
+
+      .project-img-wrapper .live-demo-badge i {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+      }
+
+      .project-img-wrapper:hover .live-demo-badge {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .project-img-wrapper:hover .project-img {
+        transform: scale(1.08);
+        filter: brightness(0.7);
       }
 
       .project-body {
@@ -458,7 +495,7 @@
                 <i class="ph ph-folder-open"></i> View Projects
               </a>
               <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-custom">
-                <i class="devicon-github-original fs-5"></i> GitHub
+                <i class="devicon-github-original fs-5"></i> GitHub Profile
               </a>
               <a href="https://linkedin.com/in/ramk1817" target="_blank" class="btn-outline-custom">
                 <i class="devicon-linkedin-plain colored fs-5"></i> LinkedIn
@@ -630,7 +667,7 @@
       </div>
     </section>
 
-    <!-- Featured Projects Section with Real Screenshots & Animations -->
+    <!-- Featured Projects Section with Interactive Hover Live Demo Badges -->
     <section id="projects" class="section-padding" style="background-color: #0b0d14;">
       <div class="container">
         <div class="section-title-wrapper text-center" data-aos="fade-up" data-aos-duration="800">
@@ -642,21 +679,30 @@
         <div class="project-card" data-aos="fade-up" data-aos-duration="1000">
           <div class="row g-0 align-items-center">
             <div class="col-lg-5">
-              <div class="project-img-wrapper">
+              <a href="https://santhosh18-ram.github.io/Skill-Sphere/" target="_blank" class="project-img-wrapper" title="Click to view Live Demo">
                 <img
                   src="assets/images/thumbs/skillsphere-real.png"
                   alt="SkillSphere Project Screenshot"
                   class="project-img"
                 />
-              </div>
+                <div class="live-demo-badge">
+                  <i class="ph ph-arrow-up-right"></i>
+                  Live Demo
+                </div>
+              </a>
             </div>
             <div class="col-lg-7">
               <div class="project-body">
-                <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
-                  <h3 class="project-title mb-0">SkillSphere – Peer-to-Peer Skill Exchange Platform</h3>
-                  <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-custom btn-sm">
-                    <i class="devicon-github-original"></i> GitHub Repo
-                  </a>
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                  <h3 class="project-title mb-0">1. SkillSphere – Peer-to-Peer Skill Exchange Platform</h3>
+                  <div class="d-flex gap-2">
+                    <a href="https://santhosh18-ram.github.io/Skill-Sphere/" target="_blank" class="btn-accent btn-sm">
+                      <i class="ph ph-arrow-up-right"></i> Live Demo
+                    </a>
+                    <a href="https://github.com/Santhosh18-ram/Skill-Sphere" target="_blank" class="btn-outline-custom btn-sm">
+                      <i class="devicon-github-original"></i> GitHub Repo
+                    </a>
+                  </div>
                 </div>
                 <div class="text-primary fw-semibold mb-3">Python, MySQL</div>
                 <ul class="project-list text-gray ps-3 mb-4">
@@ -681,21 +727,30 @@
         <div class="project-card" data-aos="fade-up" data-aos-duration="1000">
           <div class="row g-0 align-items-center">
             <div class="col-lg-5">
-              <div class="project-img-wrapper">
+              <a href="https://santhosh18-ram.github.io/Talk-to-heal/" target="_blank" class="project-img-wrapper" title="Click to view Live Demo">
                 <img
                   src="assets/images/thumbs/talktoheal-real.png"
                   alt="Talk To Heal Project Screenshot"
                   class="project-img"
                 />
-              </div>
+                <div class="live-demo-badge">
+                  <i class="ph ph-arrow-up-right"></i>
+                  Live Demo
+                </div>
+              </a>
             </div>
             <div class="col-lg-7">
               <div class="project-body">
-                <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
-                  <h3 class="project-title mb-0">Talk To Heal – AI Voice Healthcare Triage System</h3>
-                  <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-custom btn-sm">
-                    <i class="devicon-github-original"></i> GitHub Repo
-                  </a>
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                  <h3 class="project-title mb-0">2. Talk To Heal – AI Voice Healthcare Triage System</h3>
+                  <div class="d-flex gap-2">
+                    <a href="https://santhosh18-ram.github.io/Talk-to-heal/" target="_blank" class="btn-accent btn-sm">
+                      <i class="ph ph-arrow-up-right"></i> Live Demo
+                    </a>
+                    <a href="https://github.com/Santhosh18-ram/Talk-to-heal" target="_blank" class="btn-outline-custom btn-sm">
+                      <i class="devicon-github-original"></i> GitHub Repo
+                    </a>
+                  </div>
                 </div>
                 <div class="text-primary fw-semibold mb-3">HTML, CSS, JavaScript, Python (Flask)</div>
                 <ul class="project-list text-gray ps-3 mb-4">
@@ -719,21 +774,30 @@
         <div class="project-card mb-0" data-aos="fade-up" data-aos-duration="1000">
           <div class="row g-0 align-items-center">
             <div class="col-lg-5">
-              <div class="project-img-wrapper">
+              <a href="https://santhosh18-ram.github.io/SIH-26MPLAD/" target="_blank" class="project-img-wrapper" title="Click to view Live Demo">
                 <img
                   src="assets/images/thumbs/mplads-real.png"
                   alt="MPLADS Sentinel Project Screenshot"
                   class="project-img"
                 />
-              </div>
+                <div class="live-demo-badge">
+                  <i class="ph ph-arrow-up-right"></i>
+                  Live Demo
+                </div>
+              </a>
             </div>
             <div class="col-lg-7">
               <div class="project-body">
-                <div class="d-flex align-items-center justify-content-between mb-2 flex-wrap gap-2">
-                  <h3 class="project-title mb-0">MPLADS Sentinel – AI Risk Intelligence System</h3>
-                  <a href="https://github.com/Santhosh18-ram" target="_blank" class="btn-outline-custom btn-sm">
-                    <i class="devicon-github-original"></i> GitHub Repo
-                  </a>
+                <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                  <h3 class="project-title mb-0">3. MPLADS Sentinel – AI Risk Intelligence System</h3>
+                  <div class="d-flex gap-2">
+                    <a href="https://santhosh18-ram.github.io/SIH-26MPLAD/" target="_blank" class="btn-accent btn-sm">
+                      <i class="ph ph-arrow-up-right"></i> Live Demo
+                    </a>
+                    <a href="https://github.com/Santhosh18-ram/SIH-26MPLAD" target="_blank" class="btn-outline-custom btn-sm">
+                      <i class="devicon-github-original"></i> GitHub Repo
+                    </a>
+                  </div>
                 </div>
                 <div class="text-primary fw-semibold mb-3">React/Next.js, Python (FastAPI), PostgreSQL <span class="badge bg-primary ms-2">Smart India Hackathon 2026</span></div>
                 <ul class="project-list text-gray ps-3 mb-4">
